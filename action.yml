@@ -1,5 +1,8 @@
-name: Sync volta and .node_version
+name: Synchronize volta and .node_version
 description: Synchronize volta and .node_version.
+branding:
+  color: gray-dark
+  icon: check-circle
 inputs:
   package_json_path:
     description: package.json file path
