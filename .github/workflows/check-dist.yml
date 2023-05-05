@@ -1,0 +1,49 @@
+name: Check dist
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+
+jobs:
+  check-dist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Rebuild the dist directory
+        run: yarn run build
+
+      - name: Compare the expected and actual dist directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol ${{inputs.dist-path}} | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after the build. See the status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+
+      # If inners of the dist directory were different than expected, upload the expected version as an artifact
+      - name: Upload artifact
+        if: ${{failure() && steps.diff.conclusion == 'failure'}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ${{inputs.dist-path}}

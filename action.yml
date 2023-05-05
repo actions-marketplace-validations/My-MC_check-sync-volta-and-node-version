@@ -1,0 +1,12 @@
+name: Sync volta and .node_version
+description: Synchronize volta and .node_version.
+inputs:
+  package_json_path:
+    description: package.json file path
+    default: ./package.json
+  node_version_path:
+    description: .node_version file path
+    default: ./.node-version
+runs:
+  using: node16
+  main: dist/index.js

@@ -1,0 +1,13 @@
+{
+  "name": "dummy",
+  "version": "0.0.1",
+  "description": "dummy",
+  "main": "index.js",
+  "repository": "https://github.com/My-MC/check-sync-volta-and-node-version",
+  "license": "MIT",
+  "scripts": {},
+  "volta": {
+    "node": "16.20.0",
+    "yarn": "1.22.19"
+  }
+}
