@@ -19,21 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
+      - uses: volta-cli/action@v4.0.0
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: yarn install --immutable --immutable-cache
 
       - name: Rebuild the dist directory
         run: yarn run build
 
       - name: Compare the expected and actual dist directories
         run: |
-          if [ "$(git diff --ignore-space-at-eol ${{inputs.dist-path}} | wc -l)" -gt "0" ]; then
+          if [ "$(git diff --ignore-space-at-eol diff/ | wc -l)" -gt "0" ]; then
             echo "Detected uncommitted changes after the build. See the status below:"
             git diff
             exit 1
@@ -46,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: ${{inputs.dist-path}}
+          path: diff/

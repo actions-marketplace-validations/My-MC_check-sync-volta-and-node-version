@@ -2,6 +2,11 @@
 node_modules/
 
 # dist
-lib/
-dist/
+/dist/
 
+# eslint config file
+.eslintrc.js
+
+# yarn
+.yarn/
+.pnp.*
